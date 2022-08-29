@@ -1,38 +1,52 @@
-.App {
-  text-align: center;
+
+h1.ant-typography{
+  font-weight: 400;
+  font-size: 3rem;
+  color: #fff
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h3.ant-typography{
+  font-weight: 700;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+h4.ant-typography{
+  font-weight: 400;
+  color: #fff;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+h5.ant-typography{
+  font-weight: 400;
+}
+
+.ant-progress-text{
+  color: #fff
+}
+
+.ant-input{
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.sidebar{
+  height: 100%;
   display: flex;
   flex-direction: column;
+  flex: 0 0 80px;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 20px 0;
+  background-color: inherit;
 }
 
-.App-link {
-  color: #61dafb;
+.ant-select-selection-item{
+  font-weight: 600
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@media (max-width: 600px) {
+  .wrapper{
+    flex-wrap: wrap;
+    margin: 0
   }
-  to {
-    transform: rotate(360deg);
+  .App{
+    align-items: flex-start !important 
   }
 }
+
