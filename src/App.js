@@ -8,6 +8,7 @@ import SideSection from './components/SideSection';
 
 import {useSelector, useDispatch} from 'react-redux'
 import {setLocation} from './store/locationSlice'
+import { fetchGeoLocation } from './store/locationSlice';
 import {fetchChartData} from './store/chartDataSlice'
 import {fetchData} from './store/dataSlice'
 
@@ -18,10 +19,19 @@ function App() {
 
 
   React.useEffect(() => {
-    if (localStorage.getItem('locations')) {
-      let locations = JSON.parse(localStorage.getItem('locations'))
-      dispatch(setLocation(locations[locations.length -1]))
-    }
+      const geolocationAPI = navigator.geolocation;
+      geolocationAPI.getCurrentPosition(
+        (pos) =>{
+        const position = {lat: pos.coords.latitude, lon: pos.coords.longitude}
+        dispatch(fetchGeoLocation(position))
+      },
+      () => {
+        if (localStorage.getItem('locations')) {
+          let locations = JSON.parse(localStorage.getItem('locations'))
+          dispatch(setLocation(locations[locations.length -1]))
+        }
+      }
+      )
   }, [])
 
   React.useEffect(() => {
@@ -50,6 +60,7 @@ function App() {
       <Layout
         className='sider'
         style={{
+          position: 'relative',
           height: '100%',
           minWidth: 350,
           backgroundImage: 'linear-gradient(to right bottom, #454f76, #3b456a, #303c5f, #263354, #1c2a49, #182748, #142547, #0f2246, #11254e, #132756, #172a5e, #1b2c66)'

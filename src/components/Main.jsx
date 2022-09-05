@@ -28,7 +28,6 @@ function Main() {
 
   const dispatch = useDispatch()
 
-
   const config = {
     data: chartData,
     xField: 'date',

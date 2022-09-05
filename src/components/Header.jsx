@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography } from 'antd';
 import { Divider } from 'antd';
 import { Input } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined} from '@ant-design/icons';
 import { AutoComplete } from 'antd';
 
 import DropButton from './DropButton'
@@ -28,15 +28,6 @@ function Header() {
   const onSelect = (data) => {
     const selected = options.filter(el => el.value === data)
     dispatch(setLocation(selected[0]))
-    let locations = localStorage.getItem('locations')
-    if(locations === null) locations = []
-    else locations = JSON.parse(locations)
-    if(locations.length < 3)locations.push(selected[0])
-    else {
-      locations.shift()
-      locations.push(selected[0])
-    }
-    localStorage.setItem('locations', JSON.stringify(locations))
   };
 
 
