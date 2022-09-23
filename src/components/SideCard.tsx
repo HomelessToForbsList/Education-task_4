@@ -1,8 +1,14 @@
 import { Typography } from 'antd';
+import  styles from '../styles/SideCard.module.css';
+import type { Data } from  '../types'
 
+interface SideCardProps{
+  cardType: string;
+  data: Data;
+  time: Date;
+}
 
-
-function SideCard(props) {
+const SideCard: React.FC<SideCardProps> = function(props: SideCardProps) {
 
   const sunTime = new Date((props.cardType === 'Sunrise' ? props.data.sys.sunrise : props.data.sys.sunset) * 1000)
 
@@ -12,8 +18,8 @@ function SideCard(props) {
 
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.2)', minHeight: 100, borderRadius: 5, marginTop: 15 }}>
-      <div style={{ width: 50, height: 50, margin: '0 15px' }}>
+    <div className={styles.wrapper}>
+      <div className={styles.image}>
         {props.cardType === 'Sunrise' ?
           <img src='/img/sunrise.png' alt='icon' style={{ width: '100%' }} ></img>
           : <img src='/img/sunset.png' alt='icon' style={{ width: '100%' }} ></img>}
@@ -26,7 +32,7 @@ function SideCard(props) {
           {(sunTime.getUTCHours() < 10 ? '0' + sunTime.getUTCHours() : sunTime.getUTCHours()) + ':' + (sunTime.getUTCMinutes() < 10 ? '0' + sunTime.getUTCMinutes() : sunTime.getUTCMinutes())}
         </Typography.Title>
       </div>
-      <div className="difference" style={{ display: 'flex', alignItems: 'center', margin: '0 15px', color: 'red' }}>
+      <div className={styles.difference}>
         <Typography.Title level={5} style={{ color: '#9B9AA0', marginBottom: 0 }}>
           {sunTime.getUTCHours() > props.time.getUTCHours() ? `in ${timeDifference} hours` : `${timeDifference} hours ago`}
         </Typography.Title>

@@ -1,0 +1,38 @@
+.wrapper{
+  margin: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.location_block{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.temperature{
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.feels_like{
+  margin-bottom: 0.1em;
+  color: #fff;
+  text-align: right;
+}
+
+.favourite_block{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  text-align: right;
+  padding: 5px 10px;
+}
+
+.favourite_icon{
+  font-size: 30px;
+  color: #fff;
+  cursor: pointer;
+  margin-left: 10px;
+}

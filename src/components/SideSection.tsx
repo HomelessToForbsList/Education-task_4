@@ -3,20 +3,21 @@ import { Typography, Divider, Progress } from 'antd';
 import { Skeleton } from 'antd';
 import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import { message } from 'antd';
-
+import styles from '../styles/SideSection.module.css'
 import SideCard from './SideCard';
 
-import { useDispatch, useSelector } from 'react-redux'
+import {useLocationSelector, useDataSelector, useAppDispatch} from '../hooks'
+import type { Location } from '../types';
 import { setList } from '../store/savedLocationsSlice'
 
-function SideSection() {
+const SideSection: React.FC = function() {
 
   const [isFavourite, setIsFavourite] = React.useState(false)
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
-  const location = useSelector(state => state.location.location)
-  const data = useSelector(state => state.data.data)
+  const location = useLocationSelector()
+  const data = useDataSelector()
 
   let imgSrc = ''
   let time = new Date(Date.now())
@@ -24,9 +25,10 @@ function SideSection() {
   if (data?.dt) time = new Date((data.dt + data.timezone) * 1000)
 
   function addLocationToFavourite() {
-    let locations = localStorage.getItem('locations')
-    if (locations === null) locations = []
-    else locations = JSON.parse(locations)
+    let locationsStorage:  string | null = localStorage.getItem('locations' || '')
+    let locations: Location[]
+    if (locationsStorage === null) locations = []
+    else locations = JSON.parse(locationsStorage)
     if (locations.length < 3) locations.push(location)
     else {
       locations.shift()
@@ -39,9 +41,10 @@ function SideSection() {
   }
 
   function removeLocationFromFavourite() {
-    let locations = localStorage.getItem('locations')
-    if (locations !== null && locations.length > 0) {
-      locations = JSON.parse(locations)
+    let locationsStorage: string | null = localStorage.getItem('locations')
+    if (locationsStorage !== null && locationsStorage.length > 0) {
+      let locations : Location[]
+      locations = JSON.parse(locationsStorage)
       locations = locations.filter(el => el.value !== location.value)
       localStorage.setItem('locations', JSON.stringify(locations))
       dispatch(setList(locations))
@@ -51,9 +54,10 @@ function SideSection() {
   }
 
   React.useEffect(() => {
-    let locations = localStorage.getItem('locations')
-    locations = JSON.parse(locations)
-    if (locations !== null && locations.length > 0) {
+    let locationsStorage: string | null = localStorage.getItem('locations')
+    if (locationsStorage !== null && locationsStorage.length > 0) {
+      let locations: Location[]
+      locations = JSON.parse(locationsStorage)
       const index = locations.findIndex(el => el.value === location.value)
       if (index > -1) setIsFavourite(true)
       else setIsFavourite(false)
@@ -64,8 +68,8 @@ function SideSection() {
 
   if (data?.main) {
     return (
-      <div style={{ margin: 15, display: 'flex', flexDirection: 'column' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className={styles.wrapper}>
+        <div className={styles.location_block}>
           <div>
             <Typography.Title level={4}>
               {location.name}
@@ -80,14 +84,14 @@ function SideSection() {
             </Typography.Title>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between' }}>
+        <div className={styles.temperature}>
           <div>
             <img src={imgSrc} alt='ico' />
             <Typography.Paragraph style={{ color: '#DCECF9', fontWeight: 200 }}>{data.weather[0].description}</Typography.Paragraph>
           </div>
           <Typography.Title level={1} style={{ marginBottom: '0.1em' }}>{Math.round(data.main.temp)}° C</Typography.Title>
         </div>
-        <Typography.Title level={4} style={{ marginBottom: '0.1em', color: '#fff', textAlign: 'right' }}>feels like {Math.round(data.main.feels_like)}° C</Typography.Title>
+        <Typography.Title level={4} className={styles.feels_like}>feels like {Math.round(data.main.feels_like)}° C</Typography.Title>
         <Divider style={{ borderColor: '#8491A1', height: 10 }} />
         <div>
           <Typography.Title level={4}>Cloudiness</Typography.Title>
@@ -98,14 +102,14 @@ function SideSection() {
           <SideCard data={data} cardType='Sunrise' time={time} />
           <SideCard data={data} cardType='Sunset' time={time} />
         </div>
-        <div style={{ position: 'absolute', right: 0, bottom: 0, textAlign: 'right', padding: '5px 10px' }} >
+        <div className={styles.favourite_block} >
           {isFavourite ?
             <HeartFilled
-              style={{ fontSize: '30px', color: '#fff', cursor: 'pointer', marginLeft: '10px' }}
+              className={styles.favourite_icon}
               onClick={removeLocationFromFavourite}
             /> :
             <HeartOutlined
-              style={{ fontSize: '30px', color: '#fff', cursor: 'pointer', marginLeft: '10px' }}
+              className={styles.favourite_icon}
               onClick={addLocationToFavourite}
             />
           }

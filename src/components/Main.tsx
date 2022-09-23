@@ -1,7 +1,6 @@
 import { Typography } from 'antd';
-import React from 'react';
 import { Select } from 'antd'
-import { Skeleton } from 'antd';
+import styles from '../styles/Main.module.css'
 
 
 import Header from './Header';
@@ -14,7 +13,7 @@ import { setMark } from '../store/chartDataSlice'
 import { fetchChartData } from '../store/chartDataSlice'
 
 
-import { useSelector, useDispatch } from 'react-redux'
+import {useDataSelector, useChartDataSelector, useLocationSelector, useAppDispatch} from '../hooks'
 
 import { Area } from '@ant-design/plots';
 
@@ -22,11 +21,13 @@ const { Option } = Select;
 
 function Main() {
 
-  const chartData = useSelector(state => state.chartData.chartData)
-  const data = useSelector(state => state.data.data)
-  const location = useSelector(state => state.location.location)
+  const chartData = useChartDataSelector()
+  const data = useDataSelector()
+  const location = useLocationSelector()
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
+
+
 
   const config = {
     data: chartData,
@@ -58,7 +59,6 @@ function Main() {
       }
     },
     smooth: true,
-    height: '100%',
     line: { color: '#2C4A7F', size: 4 },
     areaStyle: () => {
       return {
@@ -68,29 +68,29 @@ function Main() {
     }
   }
 
-  const handleChange = (value) => {
+  const handleChange = (value: string) => {
     dispatch(setMark(value))
     dispatch(fetchChartData(location))
   };
 
   return (
-    <div className='head' style={{ height: '100%', justifyContent: 'start', display: 'flex', flexDirection: 'column' }}>
+    <div className={styles.head}>
       <Header />
-      <div className='ty' >
-        <Typography.Title level={4} style={{ color: '#183051', fontWeight: 600, paddingLeft: '10px' }}>Today overview</Typography.Title>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '10px' }} >
+      <div  >
+        <Typography.Title level={4} className={styles.overview}>Today overview</Typography.Title>
+        <div className={styles.card_container} >
           <WindCard data={data} />
           <HumidityCard data={data} />
           <PressureCard data={data} />
           <VisibilityCard data={data} />
         </div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', flex: '1 1 50%' }} >
+      <div className={styles.chart_container} >
         <div style={{ display: 'flex' }}>
           <Select
             disabled={chartData.length > 0 ? false : true}
-            defaultValue={{ value: 'main.temp', label: 'Temperature' }}
-            style={{ width: 'auto', color: '#1890ff', fontWeight: 600, fontSize: '20px', lineHeight: 1.4, marginBottom: '0.5em', marginTop: 0 }}
+            defaultValue={ 'main.temp'}
+            className={styles.chart_select}
             bordered={false}
             size='large'
             onChange={handleChange}>
@@ -103,7 +103,7 @@ function Main() {
             <Typography.Title level={4} style={{ color: '#183051', fontWeight: 600 }}> for the next 5 days</Typography.Title>
           </div>
         </div>
-        <div id="container" style={{ height: '95%', backgroundColor: 'rgba(0, 0, 0, 0.02)', padding: '10px' }}>
+        <div id="container" className={styles.chart_area} >
           <Area {...config} />
         </div>
       </div>

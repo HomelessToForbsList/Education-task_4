@@ -1,13 +1,18 @@
 import { Typography } from 'antd';
 import { Skeleton } from 'antd';
+import styles from '../styles/Card.module.css'
+import type {CardProps} from '../types'
 
 
-function HumidityCard(props){
+
+const HumidityCard: React.FC<CardProps> = function(props: CardProps) {
+
+
 
   if(props.data?.main?.humidity)
   return(
-    <div style={{display: 'flex',flex: '1 1 45%', marginTop: '5px',alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.02)', minHeight: 100, borderRadius: 5}}>
-      <div style={{width:50, height:50, margin: '0 15px'}}>
+    <div className={styles.wrapper}>
+      <div className={styles.icon}>
         <img src='/img/card_icons/humidity.png' alt='icon' style={{width: '100%'}} ></img>
       </div>
       <div className="mark">
@@ -18,7 +23,7 @@ function HumidityCard(props){
         {props.data.main.humidity} %
       </Typography.Title>
       </div>
-      <div className="difference" style={{display:'flex',alignItems: 'center', margin: '0 15px', color: 'red'}}>
+      <div className={styles.difference}>
       </div>
     </div>
   )

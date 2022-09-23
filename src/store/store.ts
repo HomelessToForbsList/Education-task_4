@@ -4,7 +4,7 @@ import data from './dataSlice'
 import chartData from './chartDataSlice'
 import savedLocations from './savedLocationsSlice'
 
-export default configureStore({
+const store =  configureStore({
   reducer:{
     location,
     data,
@@ -12,3 +12,8 @@ export default configureStore({
     savedLocations
   }
 })
+
+export default store
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch

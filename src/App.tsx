@@ -6,16 +6,19 @@ import { Layout } from 'antd';
 import Main from './components/Main';
 import SideSection from './components/SideSection';
 
-import {useSelector, useDispatch} from 'react-redux'
+
 import {setLocation} from './store/locationSlice'
 import { fetchGeoLocation } from './store/locationSlice';
 import {fetchChartData} from './store/chartDataSlice'
 import {fetchData} from './store/dataSlice'
 
-function App() {
+import { useAppDispatch, useLocationSelector} from './hooks'
 
-  const location = useSelector(state => state.location.location)
-  const dispatch = useDispatch()
+const App: React.FC = () =>{
+
+  const location = useLocationSelector()
+  const dispatch = useAppDispatch()
+
 
 
   React.useEffect(() => {
@@ -27,25 +30,24 @@ function App() {
       },
       () => {
         if (localStorage.getItem('locations')) {
-          let locations = JSON.parse(localStorage.getItem('locations'))
+          let locations = JSON.parse(localStorage.getItem('locations')!)
           dispatch(setLocation(locations[locations.length -1]))
         }
       }
       )
-  }, [])
+  }, [dispatch])
 
   React.useEffect(() => {
     if (location.value) {
       dispatch(fetchData(location))
       dispatch(fetchChartData(location))
     }
-  }, [location])
-
+  }, [location, dispatch])
 
 
   return (
     <div className='App' style={{display: 'flex', alignItems: 'center', height: '100%'}}>
-      <Layout className='wrapper' style={{
+    <Layout className='wrapper' style={{
       margin: '0 auto',
       height: '800px',
       maxWidth: '1100px',
@@ -69,7 +71,7 @@ function App() {
       </Layout>
     </Layout>
     </div>
-  );
+  )
 }
 
 export default App;
